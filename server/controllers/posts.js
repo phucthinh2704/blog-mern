@@ -27,7 +27,18 @@ export const updatePost = async (req, res) => {
 			{ _id: updatePost._id },
 			updatePost,
 			{ new: true }
-		);    // new: true sẽ trả về bản ghi đã được cập nhật
+		); // new: true sẽ trả về bản ghi đã được cập nhật
+		res.status(201).json(post);
+	} catch (error) {
+		res.status(500).json({ message: error.message });
+	}
+};
+
+export const deletePost = async (req, res) => {
+	try {
+		const _id = req.body._id;
+		const post = await PostModel.find({ _id })
+		await PostModel.deleteOne({ _id });
 		res.status(201).json(post);
 	} catch (error) {
 		res.status(500).json({ message: error.message });

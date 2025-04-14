@@ -22,3 +22,4 @@ Libs Deps:
    - redux-actions
    - redux-saga
    - styled-components
+   - TailwindCSS

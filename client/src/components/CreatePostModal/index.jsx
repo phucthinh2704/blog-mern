@@ -40,23 +40,27 @@ const CreatePostModal = () => {
 	const { isShow } = useSelector(modalState$); // lấy state modal từ redux store
 
 	const handleClose = useCallback(() => {
-		dispatch(hideModal());
-
-		setData({
+		setData((prev) => ({
+			...prev,
 			title: "",
 			content: "",
 			attachment: "",
-		});
-	}, [dispatch]);
+		}));
+		console.log(data);
+		dispatch(hideModal());
+	}, [dispatch, data]);
 
 	const handleOk = useCallback(() => {
+		if (!data.content || !data.title) return;
 		dispatch(createPost.createPostRequest(data));
-		dispatch(hideModal());
-		setData({
+		setData((prev) => ({
+			...prev,
 			title: "",
 			content: "",
 			attachment: "",
-		});
+		}));
+		console.log(data);
+		dispatch(hideModal());
 	}, [dispatch, data]);
 
 	return (
@@ -66,9 +70,7 @@ const CreatePostModal = () => {
 				open={isShow}
 				onOk={handleOk}
 				onCancel={handleClose}>
-				<Form
-					// form={form}
-					layout="vertical">
+				<Form layout="vertical">
 					<Form.Item
 						label="Title"
 						name="title"

@@ -13,7 +13,8 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import moment from "moment";
 import useStyles from "./styles";
 import { useDispatch } from "react-redux";
-import { updatePost } from "../../../redux/actions";
+import { deletePost, updatePost } from "../../../redux/actions";
+import DeleteButton from "../../DeleteButton";
 
 const Post = ({ post }) => {
 	const classes = useStyles();
@@ -25,6 +26,10 @@ const Post = ({ post }) => {
 				likeCount: post.likeCount + 1,
 			})
 		);
+	}, [dispatch, post]);
+
+	const onDelete = useCallback(() => {
+		dispatch(deletePost.deletePostRequest({ _id: post._id }));
 	}, [dispatch, post]);
 
 	return (
@@ -59,16 +64,25 @@ const Post = ({ post }) => {
 					{post.content}
 				</Typography>
 			</CardContent>
-			<CardActions>
-				<FavoriteIcon
-					onClick={onLikeBtnClick}
-					style={{ cursor: "pointer" }}
-				/>
-				<Typography
-					component="span"
-					color="textSecondary">{`${post.likeCount} ${
-					post.likeCount <= 1 ? "like" : "likes"
-				}`}</Typography>
+			<CardActions
+				style={{
+					display: "flex",
+					justifyContent: "space-between",
+					padding: 12,
+				}}>
+				<div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+					<FavoriteIcon
+						onClick={onLikeBtnClick}
+						color={post.likeCount ? "error" : "action"}
+						style={{ cursor: "pointer" }}
+					/>
+					<Typography
+						component="span"
+						color="textSecondary">{`${post.likeCount} ${
+						post.likeCount <= 1 ? "like" : "likes"
+					}`}</Typography>
+				</div>
+				<DeleteButton onDelete={onDelete}></DeleteButton>
 			</CardActions>
 		</Card>
 	);
